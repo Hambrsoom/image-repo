@@ -1,0 +1,48 @@
+{
+  "name": "image-repo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./src/server.ts",
+  "scripts": {
+    "dev": "tsnd --inspect --respawn ./src/server.ts",
+    "watch": "nodemon",
+    "test": "jest",
+    "cover": "jest --coverage",
+    "typecheck": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Hambrsoom/image-repo.git"
+  },
+  "author": "Hambrsoom Baboyan",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Hambrsoom/image-repo/issues"
+  },
+  "homepage": "https://github.com/Hambrsoom/image-repo#readme",
+  "devDependencies": {
+    "@types/express": "^4.16.1",
+    "tslint": "^5.12.1",
+    "typescript": "^3.3.3"
+  },
+  "dependencies": {
+    "@types/bcryptjs": "^2.4.2",
+    "@types/body-parser": "^1.19.0",
+    "@types/cors": "^2.8.9",
+    "@types/helmet": "^4.0.0",
+    "@types/jsonwebtoken": "^8.5.0",
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.0",
+    "class-validator": "^0.13.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "helmet": "^4.3.1",
+    "jsonwebtoken": "^8.5.1",
+    "mysql": "^2.18.1",
+    "salt": "^0.5.5",
+    "ts-node-dev": "^1.1.1",
+    "typeorm": "^0.2.29",
+    "typeorm-naming-strategies": "^2.0.0"
+  }
+}
