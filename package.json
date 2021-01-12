@@ -21,9 +21,12 @@
   },
   "homepage": "https://github.com/Hambrsoom/image-repo#readme",
   "devDependencies": {
-    "@types/express": "^4.16.1",
+    "@types/del": "^4.0.0",
+    "@types/express": "^4.17.10",
+    "@types/lokijs": "^1.5.3",
+    "@types/multer": "^1.4.5",
     "tslint": "^5.12.1",
-    "typescript": "^3.3.3"
+    "typescript": "^3.9.7"
   },
   "dependencies": {
     "@types/bcryptjs": "^2.4.2",
@@ -35,11 +38,14 @@
     "body-parser": "^1.19.0",
     "class-validator": "^0.13.0",
     "cors": "^2.8.5",
+    "del": "^6.0.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "helmet": "^4.3.1",
     "jsonwebtoken": "^8.5.1",
     "jwt-decode": "^3.1.2",
+    "lokijs": "^1.5.11",
+    "multer": "^1.4.2",
     "mysql": "^2.18.1",
     "salt": "^0.5.5",
     "ts-node-dev": "^1.1.1",

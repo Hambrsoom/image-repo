@@ -17,6 +17,9 @@ export class Image {
     @Column({nullable: false})
     path: string;
 
+    @Column({default: true})
+    isPublic: boolean;
+
     @ManyToOne(() => User, user => user.images)
     user: User;
 }
