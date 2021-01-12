@@ -22,6 +22,8 @@ const router: Router = Router();
 
 router.post("/",[checkJwt], upload.single("image") , ImageController.addSingleImage);
 
-router.delete("/:id",[checkJwt], [checkOwner], ImageController.deleteImage);
+router.delete("/deleteSelectedImages", [checkJwt], [checkOwner], ImageController.deleteSelectedImages);
+
+router.delete("/",[checkJwt], ImageController.deleteAllImagesOfUser);
 
 export default router;

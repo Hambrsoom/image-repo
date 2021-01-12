@@ -6,7 +6,6 @@ import config from "../../config/config";
 export const checkJwt = (req: Request, res: Response, next: NextFunction) => {
   // get the jwt token from the head
   // format Token: Authorization: Bearer <accesss_token>
-  console.log("Hello world");
   const token = req.headers["authorization"];
 
   // if(!token) {
@@ -32,7 +31,6 @@ export const checkJwt = (req: Request, res: Response, next: NextFunction) => {
   // the token is valid for 1 hour
   // we want to send a new token on every request
   const { userId, username } = jwtPayload;
-  console.log(userId)
   const newToken:any = jwt.sign({ userId, username }, config.jwtSecret, {
     expiresIn: "1h"
   });

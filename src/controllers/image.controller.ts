@@ -30,9 +30,20 @@ export class ImageController {
         response.status(200).json(images);
     }
 
-    static deleteImage = async (request: Request, response: Response) => {
-        await ImageService.deleteImageByID(Number(request.params.id));
-        response.status(204).send("deleted image successfuly");
+    static deleteSelectedImages = async (request: Request, response: Response) => {
+        for (let imageID of request.body.listOfImageIDs) {
+            await ImageService.deleteImageByID(Number(imageID));
+        }
+
+        response.status(200).send("deleted all selected images successfuly");
     }
 
+    static deleteAllImagesOfUser = async (request: Request, response: Response) => {
+        const decoded = jwt_decode(request.headers["authorization"]);
+        const images: Image[] = await ImageService.getAllImagesByUserID(Number(decoded["userId"]));
+        for (let image of images) {
+            await ImageService.deleteImageByID(image.id);
+        }
+        response.status(200).send("deleted all the images of the User successfuly");
+    }
 }
