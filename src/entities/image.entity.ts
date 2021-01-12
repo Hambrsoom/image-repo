@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from "typeorm";
 import { Length } from "class-validator";
 import { User } from "./user.entity";
 
@@ -20,6 +20,14 @@ export class Image {
     @Column({default: true})
     isPublic?: boolean;
 
+    @Column({default: 0})
+    like: number
+
+
     @ManyToOne(() => User, user => user.images)
     user!: User;
+
+    @OneToMany(()=> Comment, comment => comment.image)
+    comments?: Comment[]; 
+
 }
