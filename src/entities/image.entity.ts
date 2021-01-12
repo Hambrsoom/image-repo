@@ -5,21 +5,21 @@ import { User } from "./user.entity";
 @Entity()
 export class Image {
     @PrimaryGeneratedColumn()
-    id: number;
+    id?: number;
 
     @Column()
     @Length(1, 25)
-    name: string;
+    name!: string;
 
     @Column({nullable: true})
-    description: string;
+    description?: string;
 
     @Column({nullable: false})
-    path: string;
+    path!: string;
 
     @Column({default: true})
-    isPublic: boolean;
+    isPublic?: boolean;
 
     @ManyToOne(() => User, user => user.images)
-    user: User;
+    user!: User;
 }

@@ -1,13 +1,14 @@
 import { Router } from "express";
 import { ImageController } from "../controllers/image.controller";
 import { checkJwt } from "../middlewares/checkJwt";
+import { checkOwner } from "../middlewares/checkOwner";
 import path from "path";
 
 import multer from "multer";
 
 const storage: multer.StorageEngine = multer.diskStorage({
     destination: function(req, file, callBack) {
-        callBack(null, "../public/uploads/");
+        callBack(null, "./public/uploads/");
     },
     filename: function(req, file, callBack){
         callBack(null, file.fieldname + "-" + Date.now() + path.extname(file.originalname));
@@ -19,6 +20,8 @@ const upload: multer.Multer = multer({storage: storage});
 
 const router: Router = Router();
 
-router.post("/", [checkJwt], upload.single("image") , ImageController.addImage);
+router.post("/",[checkJwt], upload.single("image") , ImageController.addSingleImage);
+
+router.delete("/:id",[checkJwt], [checkOwner], ImageController.deleteImage);
 
 export default router;

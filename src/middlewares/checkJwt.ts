@@ -6,6 +6,7 @@ import config from "../../config/config";
 export const checkJwt = (req: Request, res: Response, next: NextFunction) => {
   // get the jwt token from the head
   // format Token: Authorization: Bearer <accesss_token>
+  console.log("Hello world");
   const token = req.headers["authorization"];
 
   // if(!token) {
