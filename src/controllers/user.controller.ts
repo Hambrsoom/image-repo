@@ -2,6 +2,8 @@ import { Request, Response } from "express";
 import { validate, ValidationError } from "class-validator";
 import { User } from "../entities/user.entity";
 import { UserService } from "../services/user.service";
+import jwt_decode from "jwt-decode";
+
 
 class UserController {
 
@@ -16,7 +18,6 @@ class UserController {
 
   static getUserByID = async (request: Request, response: Response) => {
     const userID: number = Number(request.params.id);
-
     try {
       const user: User = await UserService.getUserByID(userID);
       response.status(200).json(user);

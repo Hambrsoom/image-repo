@@ -1,6 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column, Unique } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, Unique, OneToMany } from "typeorm";
 import { Length } from "class-validator";
 import * as bcrypt from "bcryptjs";
+import { Image } from "./image.entity";
 
 @Entity()
 @Unique(["username"])
@@ -18,6 +19,9 @@ export class User {
 
     @Column({nullable: true})
     salt: string;
+
+    @OneToMany(()=> Image, image => image.user)
+    images: Image[];
 
     hashPassword(): void {
         this.password = bcrypt.hashSync(this.password, 8);

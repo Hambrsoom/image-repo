@@ -9,21 +9,21 @@ const router: Router = Router();
 
   // get one user
   router.get(
-    "/:id([0-9]+)",
+    "/:id",
     [checkJwt],
     UserController.getUserByID
   );
 
   // edit one user
   router.patch(
-    "/:id([0-9]+)",
+    "/:id",
     [checkJwt],
     UserController.editUserByID
   );
 
   // delete one user
   router.delete(
-    "/:id([0-9]+)",
+    "/:id",
     [checkJwt],
     UserController.deleteUserByID
   );
