@@ -11,6 +11,7 @@ export class AuthController {
 
       if (!(username && password)) {
         response.sendStatus(400);
+        return;
       }
 
       let user: User;
@@ -18,6 +19,7 @@ export class AuthController {
         user = await UserService.getUserByUsername(username);
       } catch (error) {
         response.status(401).send("Either your username or password is incorrect");
+        return;
       }
 
       if (!user.validatePassword(password)) {

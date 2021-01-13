@@ -9,19 +9,25 @@ import { ImageService } from "../services/image.service";
 export class ImageController {
     static addSingleImage = async (request: Request, response: Response) => {
         const decoded = jwt_decode(request.headers["authorization"]);
-        const {name, description, isPublic} = request.body;
-        const user: User = await UserService.getUserByID(decoded["userId"]);
+        let {name, description, isPublic} = request.body;
 
-        const image: Image = {
-            name: name,
-            description: description,
-            isPublic: isPublic,
-            path: request.file.path,
-            user: user
+        if (!(name && description && request.file)) {
+            response.sendStatus(400);
+            return;
         }
 
-        await getRepository(Image).save(image);
-        response.sendStatus(200);
+        try {
+            let image: Image;
+            if (typeof isPublic === "undefined") {
+                image = await ImageService.addSingleImage(name, description, request.file.path, decoded["userId"]);
+            } else {
+                isPublic = isPublic.toLowerCase() === "true";
+                image = await ImageService.addSingleImage(name, description, request.file.path, decoded["userId"], Boolean(isPublic));
+            }
+            response.status(200).json(image);
+        } catch(error) {
+            response.sendStatus(500);
+        }
     }
 
     static getAllImagesByUserID = async (request: Request, response: Response) => {
@@ -30,17 +36,33 @@ export class ImageController {
         response.status(200).json(images);
     }
 
+    static getAllPublicImages = async (request: Request, response: Response) => {
+        const images: Image[] = await ImageService.getAllPublicImages();
+        response.status(200).json(images);
+    }
+
     static deleteSelectedImages = async (request: Request, response: Response) => {
+
+        if (!(request.body.listOfImageIDs && Object.keys(request.body.listOfImageIDs).length > 0)) {
+            response.sendStatus(400);
+            return;
+        }
+
         for (let imageID of request.body.listOfImageIDs) {
             await ImageService.deleteImageByID(Number(imageID));
         }
 
-        response.status(200).send("deleted all selected images successfuly");
+        response.status(204).send("deleted all selected images successfuly");
     }
 
     static deleteAllImagesOfUser = async (request: Request, response: Response) => {
         const decoded = jwt_decode(request.headers["authorization"]);
         const images: Image[] = await ImageService.getAllImagesByUserID(Number(decoded["userId"]));
+
+        if (images.length === 0) {
+            response.status(200).send("The user doesn't have any picture to delete");
+        }
+
         for (let image of images) {
             await ImageService.deleteImageByID(image.id);
         }

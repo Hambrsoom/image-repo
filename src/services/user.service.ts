@@ -1,8 +1,5 @@
 import { getRepository } from "typeorm";
-import * as jwt from "jsonwebtoken";
 import { User } from "../entities/user.entity";
-import config from "../../config/config";
-
 
 export class UserService {
     public static async getAllUsers(): Promise<User[]> {

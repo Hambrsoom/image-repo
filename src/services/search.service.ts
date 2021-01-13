@@ -1,7 +1,6 @@
 import { getRepository } from "typeorm";
 import { Image } from "../entities/image.entity";
 
-
 export class SearchService {
     public static async getImagesByText(text: string, userID: number): Promise<Image[]> {
         return await getRepository(Image).createQueryBuilder()

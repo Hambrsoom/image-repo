@@ -8,19 +8,10 @@ export const checkJwt = (req: Request, res: Response, next: NextFunction) => {
   // format Token: Authorization: Bearer <accesss_token>
   const token = req.headers["authorization"];
 
-  // if(!token) {
-  //   return res.status(401).send("Sorry pal");
-  // } else {
-  //   // validate JWT:
-  //   const tokenBody = token.slice(7);
-  //   jwt.verify(tokenBody,)
-  //   next()
-  // }
   let jwtPayload: any;
   // try to validate the token and get data
   try {
     jwtPayload = <any>jwt.verify(token.slice(7), config.jwtSecret);
-    console.log(jwtPayload);
     res.locals.jwtPayload = jwtPayload;
   } catch (error) {
     // if token is not valid, respond with 401 (unauthorized)

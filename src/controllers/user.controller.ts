@@ -1,12 +1,8 @@
 import { Request, Response } from "express";
-import { validate, ValidationError } from "class-validator";
 import { User } from "../entities/user.entity";
 import { UserService } from "../services/user.service";
-import jwt_decode from "jwt-decode";
 
-
-class UserController {
-
+export class UserController {
   static getAllUsers = async (request: Request, response: Response) => {
     try {
       const users: User[] = await UserService.getAllUsers();
@@ -28,7 +24,12 @@ class UserController {
 
   static editUserByID = async (request: Request, response: Response) => {
     const userID: number = Number(request.params.id);
-    const username: string = request.body;
+    const username: string = request.body["username"];
+
+    if (!username) {
+      response.sendStatus(400);
+      return;
+    }
 
     let user:User;
 
@@ -41,15 +42,9 @@ class UserController {
 
     user.username = username;
 
-    const errors: ValidationError[] = await validate(user);
-    if (errors.length > 0) {
-      response.status(400).json(errors);
-      return;
-    }
-
     try {
       user = await UserService.saveUser(user);
-      response.status(204).json(user);
+      response.status(204).send(user);
     } catch (error) {
       response.status(409).send("username already in use");
     }
@@ -59,14 +54,11 @@ class UserController {
     const userID: number = Number(request.params.id);
 
     try {
-      await UserService.getUserByID(userID);
-      UserService.deleteUserByID(userID);
-      response.status(204).send("deleted user successfuly");
+      await UserService.deleteUserByID(userID);
+      response.status(204).send("User deleted successfuly");
     } catch (error) {
-      response.status(404).send("User not found");
+      response.status(404).send("User is not found");
       return;
     }
   }
 }
-
-export default UserController;

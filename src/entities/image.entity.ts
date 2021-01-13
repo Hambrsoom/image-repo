@@ -24,7 +24,7 @@ export class Image {
     @Column({default: 0, nullable: false})
     like?: number;
 
-    @ManyToOne(() => User, user => user.images)
+    @ManyToOne(() => User, user => user.images, { onDelete: "CASCADE" })
     user!: User;
 
     @OneToMany(()=> Comment, comment => comment.image)

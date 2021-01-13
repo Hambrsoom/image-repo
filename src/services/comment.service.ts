@@ -13,8 +13,7 @@ export class CommentService {
         });
     }
 
-    public static async postCommentForImage(imageID: number, userID: number, description: string): Promise<Comment> {
-        const image: Image = await ImageService.getImageByID(imageID);
+    public static async postCommentForImage(image: Image, userID: number, description: string): Promise<Comment> {
         const user: User = await UserService.getUserByID(userID);
         const comment: Comment = {
             description: description,
@@ -35,7 +34,10 @@ export class CommentService {
     }
 
     public static async deleteCommentByID(commentID: number): Promise<void> {
-        await getRepository(Comment).delete(commentID);
+        const result = await getRepository(Comment).delete(commentID);
+        if (result.affected === 0) {
+            throw new Error;
+        }
     }
 
     public static async isOwnerOfComment(userID: number, commentID: number): Promise<boolean> {

@@ -5,7 +5,7 @@ import { checkCommentOwner } from "../middlewares/checkCommentOwner";
 
 const router:Router = Router();
 
-router.get("/:id", [checkJwt], CommentController.getAllCommentForImage);
+router.get("/:id", [checkJwt], CommentController.getAllCommentsForImage);
 router.post("/:id", [checkJwt] ,CommentController.postCommentForImage);
 router.patch("/:id", [checkJwt], [checkCommentOwner], CommentController.editComment);
 router.delete("/:id", [checkJwt], [checkCommentOwner], CommentController.deleteComment);

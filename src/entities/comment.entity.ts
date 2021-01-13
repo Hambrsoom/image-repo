@@ -14,10 +14,10 @@ export class Comment {
     @Column({default: 0})
     like?: number;
 
-    @ManyToOne(() => Image, image => image.comments)
+    @ManyToOne(() => Image, image => image.comments, { onDelete: "CASCADE" })
     image!: Image;
 
-    @ManyToOne(() => User, user => user.comments)
+    @ManyToOne(() => User, user => user.comments, { onDelete: "CASCADE" })
     user!: User;
 
     @CreateDateColumn({type: "timestamp"})
