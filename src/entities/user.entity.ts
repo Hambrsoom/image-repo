@@ -27,10 +27,11 @@ export class User {
     comments!: Comment[];
 
     hashPassword(): void {
-        this.password = bcrypt.hashSync(this.password, 8);
+        this.password = bcrypt.hashSync(this.password, this.salt);
     }
 
-    checkIfUnencryptedPasswordIsValid(unencryptedPassword: string): any {
-      return bcrypt.compareSync(unencryptedPassword, this.password);
+    async validatePassword(password: string): Promise<boolean> {
+      const hash = await bcrypt.hash(password, this.salt);
+      return hash === this.password;
     }
 }

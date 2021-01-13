@@ -3,6 +3,7 @@ import { User } from "../entities/user.entity";
 import { AuthService } from "../services/auth.service";
 import { validate, ValidationError } from "class-validator";
 import { UserService } from "../services/user.service";
+import * as bcrypt from "bcrypt";
 
 export class AuthController {
     static login = async (request: Request, response: Response) => {
@@ -20,7 +21,7 @@ export class AuthController {
       }
 
       // check if encrypted password match
-      if (!user.checkIfUnencryptedPasswordIsValid(password)) {
+      if (!user.validatePassword(password)) {
         response.status(401).send();
         return;
       }
@@ -43,6 +44,10 @@ export class AuthController {
         response.status(400).send(errors);
         return;
       }
+
+      // will generate a unique salt for each user
+      const salt:any = await bcrypt.genSalt();
+      user.salt = salt;
 
       // hash the password, to securely store on DB
       user.hashPassword();
