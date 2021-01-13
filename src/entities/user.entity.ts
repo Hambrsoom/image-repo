@@ -23,6 +23,9 @@ export class User {
     @OneToMany(()=> Image, image => image.user)
     images: Image[];
 
+    @OneToMany(() => User, user => user.comments)
+    comments!: Comment[];
+
     hashPassword(): void {
         this.password = bcrypt.hashSync(this.password, 8);
     }

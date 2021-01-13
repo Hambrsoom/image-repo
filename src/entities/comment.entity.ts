@@ -1,8 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToOne, JoinColumn, CreateDateColumn, UpdateDateColumn } from "typeorm";
 import { Length } from "class-validator";
 import { User } from "./user.entity";
 import { Image } from "./image.entity";
-
 @Entity()
 export class Comment {
     @PrimaryGeneratedColumn()
@@ -13,8 +12,17 @@ export class Comment {
     description?: string;
 
     @Column({default: 0})
-    likes: number;
+    like?: number;
 
     @ManyToOne(() => Image, image => image.comments)
-    comments?: Comment[];
+    image!: Image;
+
+    @ManyToOne(() => User, user => user.comments)
+    user!: User;
+
+    @CreateDateColumn({type: "timestamp"})
+    createdAt?: Date;
+
+    @UpdateDateColumn({type: "timestamp"})
+    updatedAt?: Date;
 }
