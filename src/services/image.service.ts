@@ -41,10 +41,12 @@ export class ImageService {
     }
 
     public static async deleteImageByID(imageID: number): Promise<void> {
-        const image: Image = await ImageService.getImageByID(imageID);
-        if(typeof image !== "undefined") {
+        try {
+            const image: Image = await ImageService.getImageByID(imageID);
             await getRepository(Image).delete(image);
             await ImageService.deleteImage(image.path);
+        } catch (error) {
+            throw error("Image is not found");
         }
     }
 

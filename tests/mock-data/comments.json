@@ -1,0 +1,25 @@
+[
+    {
+        "id": 1,
+        "description": "I love this show",
+        "image":  {
+            "id": 1,
+            "name": "Winter is coming",
+            "description": "It is about Game of Thrones season 1",
+            "path": "//tests//images//Game_of_Thrones_Season_1.jpg",
+            "isPublic": true,
+            "user": {
+                 "id": 1,
+                 "username": "admin",
+                 "password": "admin",
+                 "salt": "123"
+             }
+        },
+        "user":{
+            "id": 1,
+            "username": "admin",
+            "password": "admin",
+            "salt": "123"
+        }
+    }
+]

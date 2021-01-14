@@ -11,9 +11,6 @@ export class Comment {
     @Length(10,150)
     description?: string;
 
-    @Column({default: 0})
-    like?: number;
-
     @ManyToOne(() => Image, image => image.comments, { onDelete: "CASCADE" })
     image!: Image;
 

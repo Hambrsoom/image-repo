@@ -2,6 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, Unique, OneToMany } from "typeo
 import { Length } from "class-validator";
 import * as bcrypt from "bcryptjs";
 import { Image } from "./image.entity";
+import { Comment } from "./comment.entity";
 
 @Entity()
 @Unique(["username"])
@@ -21,10 +22,10 @@ export class User {
     salt: string;
 
     @OneToMany(()=> Image, image => image.user)
-    images: Image[];
+    images?: Image[];
 
     @OneToMany(() => User, user => user.comments)
-    comments!: Comment[];
+    comments?: Comment[];
 
     hashPassword(): void {
         this.password = bcrypt.hashSync(this.password, this.salt);

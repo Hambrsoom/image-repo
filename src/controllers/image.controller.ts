@@ -11,7 +11,7 @@ export class ImageController {
         const decoded = jwt_decode(request.headers["authorization"]);
         let {name, description, isPublic} = request.body;
 
-        if (!(name && description && request.file)) {
+        if (!(name && description && request['file'])) {
             response.sendStatus(400);
             return;
         }
@@ -19,10 +19,10 @@ export class ImageController {
         try {
             let image: Image;
             if (typeof isPublic === "undefined") {
-                image = await ImageService.addSingleImage(name, description, request.file.path, decoded["userId"]);
+                image = await ImageService.addSingleImage(name, description, request['file'], decoded["userId"]);
             } else {
                 isPublic = isPublic.toLowerCase() === "true";
-                image = await ImageService.addSingleImage(name, description, request.file.path, decoded["userId"], Boolean(isPublic));
+                image = await ImageService.addSingleImage(name, description, request['file'], decoded["userId"], Boolean(isPublic));
             }
             response.status(200).json(image);
         } catch(error) {

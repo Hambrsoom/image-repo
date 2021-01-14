@@ -21,9 +21,6 @@ export class Image {
     @Column({default: true})
     isPublic?: boolean;
 
-    @Column({default: 0, nullable: false})
-    like?: number;
-
     @ManyToOne(() => User, user => user.images, { onDelete: "CASCADE" })
     user!: User;
 

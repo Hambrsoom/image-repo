@@ -1,0 +1,41 @@
+[
+    {
+       "id": 1,
+       "name": "Winter is coming",
+       "description": "It is about Game of Thrones season 1",
+       "path": "//tests//images//Game_of_Thrones_Season_1.jpg",
+       "isPublic": true,
+       "user": {
+            "id": 1,
+            "username": "admin",
+            "password": "admin",
+            "salt": "123"
+        }
+    },
+    {
+        "id": 2,
+        "name": "Winter is here",
+        "description": "It is about Game of Thrones season 8",
+        "path": "//tests//images//Game_of_Thrones_Season_8.jpg",
+        "isPublic": false,
+        "user": {
+             "id": 1,
+             "username": "admin",
+             "password": "admin",
+             "salt": "123"
+         }
+    },
+    {
+        "id": 3,
+        "name": "Daddy's home",
+        "description": "It is about the movie Daddy's home",
+        "path": "//tests//images//Daddy's home.jpg",
+        "isPublic": true,
+        "user": {
+            "id": 2,
+            "username": "tony",
+            "password": "tony",
+            "salt": "123"
+        }
+    }
+]
