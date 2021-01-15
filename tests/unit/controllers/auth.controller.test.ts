@@ -29,19 +29,74 @@ describe("register user", () => {
         expect(response.statusCode).toBe(201);
     })
 
-    test("register a user with info that already exist return status 409", async() => {
-        // // given 
-        // request.body.username = users[0].username;
-        // request.body.password = users[0].password;
-        // const rejectedPromise:Promise<never> = Promise.reject(new Error("fail"));
-        // UserService.saveUser = jest.fn().mockReturnValue(rejectedPromise);
-        // getRepository(User).save = jest.fn().mockReturnValue(rejectedPromise);
+    test("register a user with no info passed and return status 404", async() => {
+        // given 
+        request.body.username = undefined;
+        request.body.password = undefined;
+        const rejectedPromise = Promise.reject();
+        UserService.saveUser = jest.fn().mockReturnValue(rejectedPromise);
 
-        // // when
-        // await AuthController.register(request, response);
+        try{
+            // when
+            await AuthController.register(request, response);
+        } catch(error) {
+            // then
+            expect(response.statusCode).toBe(404);
+        }
+    })
+});
 
-        // // then
-        // expect(409).toBe(409);
+describe("login user", () => {
+    test("login a user successfully and return status 200", async() => {
+        // given 
+        request.body.username = users[0].username;
+        request.body.password = users[0].password;
+        const user: User = new User();
+        UserService.getUserByUsername = jest.fn().mockReturnValue(user);
+        AuthService.login = jest.fn().mockReturnValue("123");
+        // when
+        
+        await AuthController.login(request, response);
+
+        // then
+        expect(response.statusCode).toBe(200);
+        expect(response._getJSONData().token).toBe("123");
+    })
+
+    test("login a user with no info passed and return status 400", async() => {
+        // given 
+        request.body.username = undefined;
+        request.body.password = undefined;
+        const rejectedPromise = Promise.reject();
+        UserService.getUserByUsername = jest.fn().mockReturnValue(rejectedPromise);
+
+        try{
+            // when
+            await AuthController.register(request, response);
+        } catch(error) {
+            // then
+            expect(response.statusCode).toBe(400);
+        }
+    })
+
+    test("login a user with wrong password passed and return status 400", async() => {
+        // given 
+        request.body.username = users[0].username;
+        request.body.password = "wrong password";
+        const user: User = new User();
+        user.username = users[0].username;
+        user.password = users[0].password;
+        UserService.getUserByUsername = jest.fn().mockReturnValue(user);
+        
+        try {
+            // when
+            await AuthController.login(request, response);
+        } catch(error) {
+            // then
+            expect(response.statusCode).toBe(401);
+        }
+
+        
     })
 })
 

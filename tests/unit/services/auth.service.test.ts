@@ -1,6 +1,5 @@
 import { AuthService } from "../../../src/services/auth.service";
 import jwt_decode from "jwt-decode";
-import { User } from "../../../src/entities/user.entity";
 
 import users from "../../mock-data/users.json";
 jest.mock('typeorm');

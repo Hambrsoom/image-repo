@@ -8,12 +8,12 @@ export class SearchController {
     static searchByText = async (request: Request, response: Response) => {
         const decoded = jwt_decode(request.headers["authorization"]);
 
-        try {
-            const images: Image[] = await SearchService.getImagesByText(request.body.text, decoded["userId"]);
-            response.status(200).json(images);
-        } catch(error) {
-            response.sendStatus(404)
+        if (!request.body.text) {
+            response.sendStatus(400);
+            return;
         }
 
+        const images: Image[] = await SearchService.getImagesByText(request.body.text, decoded["userId"]);
+        response.status(200).json(images);
     }
 }

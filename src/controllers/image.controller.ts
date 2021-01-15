@@ -43,7 +43,7 @@ export class ImageController {
 
     static deleteSelectedImages = async (request: Request, response: Response) => {
 
-        if (!(request.body.listOfImageIDs && Object.keys(request.body.listOfImageIDs).length > 0)) {
+        if (!(request.body.listOfImageIDs || Object.keys(request.body.listOfImageIDs).length > 0)) {
             response.sendStatus(400);
             return;
         }
@@ -52,7 +52,7 @@ export class ImageController {
             await ImageService.deleteImageByID(Number(imageID));
         }
 
-        response.status(204).send("deleted all selected images successfuly");
+        response.status(200).send("deleted all selected images successfuly");
     }
 
     static deleteAllImagesOfUser = async (request: Request, response: Response) => {

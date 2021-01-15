@@ -18,7 +18,7 @@ export class UserController {
       const user: User = await UserService.getUserByID(userID);
       response.status(200).json(user);
     } catch (error) {
-      response.status(404).send("User not found");
+      response.status(404).send("User is not found");
     }
   }
 
@@ -44,7 +44,7 @@ export class UserController {
 
     try {
       user = await UserService.saveUser(user);
-      response.status(204).send(user);
+      response.status(200).json(user);
     } catch (error) {
       response.status(409).send("username already in use");
     }
@@ -55,7 +55,7 @@ export class UserController {
 
     try {
       await UserService.deleteUserByID(userID);
-      response.status(204).send("User deleted successfuly");
+      response.status(200).send("User deleted successfuly");
     } catch (error) {
       response.status(404).send("User is not found");
       return;

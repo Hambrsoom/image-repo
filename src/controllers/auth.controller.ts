@@ -36,6 +36,11 @@ export class AuthController {
       let user:User = new User();
       user.username = request.body["username"];
       user.password = request.body["password"];
+      
+      if (!(user.username && user.password)) {
+        response.sendStatus(400);
+        return;
+      }
 
       // will generate a unique salt for each user
       const salt:any = await bcrypt.genSalt();

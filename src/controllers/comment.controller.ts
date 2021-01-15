@@ -10,14 +10,13 @@ export class CommentController {
 
     static getAllCommentsForImage = async (request: Request, response: Response) => {
         const imageID: number = Number(request.params.id);
-
-        if (!(imageID)) {
-            response.sendStatus(400);
-            return;
+        try{
+            const comments: Comment[] = await CommentService.getAllCommentsForImage(imageID);
+            response.status(200).json(comments);
+        } catch(error){
+            response.sendStatus(500);
         }
-
-        const comments: Comment[] = await CommentService.getAllCommentsForImage(imageID);
-        response.status(200).json(comments);
+        
     }
 
     static postCommentForImage = async (request: Request, response: Response) => {
@@ -42,7 +41,7 @@ export class CommentController {
             const comment: Comment = await CommentService.postCommentForImage(image, decoded["userId"], description);
             response.status(200).json(comment);
         } catch(error) {
-            response.status(200).send("Failed to post the comment");
+            response.status(500).send("Failed to post the comment");
         }
     }
 
