@@ -34,7 +34,7 @@ describe("Tests for UserService methods", () => {
         getRepository(User).findOneOrFail = jest.fn().mockReturnValue(users[0]);
         
         // when
-        const user: User = await UserService.getUserByID(users[0].username);
+        const user: User = await UserService.getUserByUsername(users[0].username);
         
         // then
         expect(user).toBe(users[0]);
@@ -45,18 +45,7 @@ describe("Tests for UserService methods", () => {
         getRepository(User).save = jest.fn().mockReturnValue(users[0]);
         
         // when
-        const user: User = await UserService.getUserByID(users[0]);
-        
-        // then
-        expect(user).toBe(users[0]);
-    });
-
-    test("delete user by id successfully", async() => {
-        // given
-        getRepository(User).save = jest.fn().mockReturnValue(users[0]);
-        
-        // when
-        const user: User = await UserService.getUserByID(users[0]);
+        const user: User = await UserService.saveUser(users[0]);
         
         // then
         expect(user).toBe(users[0]);

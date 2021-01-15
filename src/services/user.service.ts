@@ -23,8 +23,4 @@ export class UserService {
     public static async saveUser(user: User): Promise<User> {
         return await getRepository(User).save(user);
     }
-
-    public static async deleteUserByID(userID: number): Promise<void> {
-        await getRepository(User).delete(userID);
-    }
 }

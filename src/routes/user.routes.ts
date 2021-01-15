@@ -7,6 +7,5 @@ const router: Router = Router();
 router.get("/", [checkJwt], UserController.getAllUsers);
 router.get("/:id", [checkJwt], UserController.getUserByID);
 router.patch("/:id", [checkJwt], UserController.editUserByID);
-router.delete("/:id", [checkJwt], UserController.deleteUserByID);
 
 export default router;

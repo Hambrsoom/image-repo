@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { User } from "../entities/user.entity";
 import { UserService } from "../services/user.service";
+import jwt_decode from "jwt-decode";
 
 export class UserController {
   static getAllUsers = async (request: Request, response: Response) => {
@@ -23,7 +24,7 @@ export class UserController {
   }
 
   static editUserByID = async (request: Request, response: Response) => {
-    const userID: number = Number(request.params.id);
+    const userID: number = Number(jwt_decode(request.headers["authorization"]));
     const username: string = request.body["username"];
 
     if (!username) {
@@ -47,18 +48,6 @@ export class UserController {
       response.status(200).json(user);
     } catch (error) {
       response.status(409).send("username already in use");
-    }
-  }
-
-  static deleteUserByID = async (request: Request, response: Response) => {
-    const userID: number = Number(request.params.id);
-
-    try {
-      await UserService.deleteUserByID(userID);
-      response.status(200).send("User deleted successfuly");
-    } catch (error) {
-      response.status(404).send("User is not found");
-      return;
     }
   }
 }

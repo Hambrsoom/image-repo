@@ -68,7 +68,7 @@ describe("Tests for UserController methods", ()=> {
 
     test("edit user by id succesfully and return status 200", async() => {
         // given
-        request.params.id = 1;
+        request.headers["authorization"] = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoicG90YXRvIiwiaWF0IjoxNjEwNjY2OTcwLCJleHAiOjE2MTA2NzA1NzB9.Dpzq37zh3opw0jHAlQo23yPgxp1daE8olrKpxaOoOsI";
         request.body.username = "Hampic";
         const newUser = new User();
         newUser.username = "Hampic";
@@ -88,7 +88,7 @@ describe("Tests for UserController methods", ()=> {
 
     test("edit user by id fail for not passing a username and return status 400", async() => {
         // given
-        request.params.id = 1;
+        request.headers["authorization"] = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoicG90YXRvIiwiaWF0IjoxNjEwNjY2OTcwLCJleHAiOjE2MTA2NzA1NzB9.Dpzq37zh3opw0jHAlQo23yPgxp1daE8olrKpxaOoOsI";
         request.body.username = undefined;
         try{
             // when
@@ -101,7 +101,7 @@ describe("Tests for UserController methods", ()=> {
 
     test("edit user by id fail for not finding a user and return status 404", async() => {
         // given
-        request.params.id = 12;
+        request.headers["authorization"] = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoicG90YXRvIiwiaWF0IjoxNjEwNjY2OTcwLCJleHAiOjE2MTA2NzA1NzB9.Dpzq37zh3opw0jHAlQo23yPgxp1daE8olrKpxaOoOsI";
         request.body.username = "Hampic";
         const rejectedPromise = Promise.reject();
         UserService.getUserByID = jest.fn().mockReturnValue(rejectedPromise);
@@ -117,7 +117,7 @@ describe("Tests for UserController methods", ()=> {
 
     test("edit user by id fail for duplicating username and return status 409", async() => {
         // given
-        request.params.id = 1;
+        request.headers["authorization"] = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoicG90YXRvIiwiaWF0IjoxNjEwNjY2OTcwLCJleHAiOjE2MTA2NzA1NzB9.Dpzq37zh3opw0jHAlQo23yPgxp1daE8olrKpxaOoOsI";
         request.body.username = "admin";
         const rejectedPromise = Promise.reject();
         UserService.getUserByID = jest.fn().mockReturnValue(users[0]);
@@ -130,24 +130,5 @@ describe("Tests for UserController methods", ()=> {
             // then
             expect(response.statusCode).toBe(409);
         }
-    });
-
-    test("delete user by id succesfully and return 200", async()=>{
-        request.params.id = 1;
-        UserService.deleteUserByID = jest.fn().mockReturnValue(true);
-
-        await UserController.deleteUserByID(request, response);
-
-        expect(response.statusCode).toBe(200);
-    });
-
-    test("delete user by id fail and return 404", async()=>{
-        request.params.id = 1;
-        const rejectedPromise = Promise.reject();
-        UserService.deleteUserByID = jest.fn().mockReturnValue(rejectedPromise);
-
-        await UserController.deleteUserByID(request, response);
-
-        expect(response.statusCode).toBe(404);
     });
 });
