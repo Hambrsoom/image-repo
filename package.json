@@ -4,12 +4,10 @@
   "description": "Capstone project (SOEN 490) - MedicDrones created by team Octocats",
   "main": "./src/server.ts",
   "scripts": {
-    "dev": "tsnd --inspect --respawn ./src/server.ts",
-    "watch": "nodemon",
+    "dev": "nodemon",
     "test": "jest",
     "cover": "jest --coverage",
-    "typecheck": "tsc",
-    "sonar": "node sonar-project.js"
+    "typecheck": "tsc"
   },
   "repository": {
     "type": "git",
