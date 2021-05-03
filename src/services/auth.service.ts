@@ -4,7 +4,7 @@ import config from "../../config/config";
 
 
 export class AuthService {
-    public static async login(user: User){
+    public static async login(user: User) {
          // sing JWT, valid for 1 hour
         return jwt.sign(
             {

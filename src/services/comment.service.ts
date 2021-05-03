@@ -4,6 +4,8 @@ import { Image } from "../entities/image.entity";
 import { ImageService } from "../services/image.service";
 import { User } from "../entities/user.entity";
 import { UserService } from "./user.service";
+import jwt_decode from "jwt-decode";
+
 
 
 export class CommentService {
@@ -40,12 +42,14 @@ export class CommentService {
         }
     }
 
-    public static async isOwnerOfComment(userID: number, commentID: number): Promise<boolean> {
+    public static async isOwnerOfComment(authorization: string, commentID: number): Promise<boolean> {
+        const decoded = jwt_decode(authorization);
+
         try{
             await getRepository(Image).findOneOrFail({
                 where: {
                     id: commentID,
-                    user_id: userID
+                    user_id: decoded["userId"]
                 }
             });
             return true;

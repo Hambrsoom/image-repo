@@ -2,6 +2,8 @@ import { getRepository } from "typeorm";
 import { Image } from "../entities/image.entity";
 import { User } from "../entities/user.entity";
 import { UserService } from "../services/user.service";
+import jwt_decode from "jwt-decode";
+
 const fs:any = require("fs");
 
 
@@ -59,12 +61,14 @@ export class ImageService {
         });
     }
 
-    public static async isOwnerOfImage(userID: number, imageID: number): Promise<boolean> {
+    public static async isOwnerOfImage(authorization: any, imageID: number): Promise<boolean> {
+        const decoded = jwt_decode(authorization);
+
         try {
             await getRepository(Image).findOneOrFail({
                 where: {
                     id: imageID,
-                    user_id: userID
+                    user_id: decoded["userId"]
                 }
             });
             return true;

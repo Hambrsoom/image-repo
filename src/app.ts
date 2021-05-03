@@ -3,6 +3,8 @@ import * as bodyParser from "body-parser";
 import cors from "cors";
 import helmet from "helmet";
 import routes from "./routes/routes";
+import errorMiddleware from './middlewares/error.middleware';
+
 
 export default class App {
   private app: express.Application;
@@ -13,6 +15,11 @@ export default class App {
       this.port = port;
 
       this.initializeMiddlewares();
+      this.initializeErrorHandling();
+  }
+
+  private initializeErrorHandling() {
+    this.app.use(errorMiddleware);
   }
 
   private initializeMiddlewares(): void {

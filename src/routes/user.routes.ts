@@ -4,7 +4,7 @@ import { checkJwt } from "../middlewares/checkJwt";
 
 const router: Router = Router();
 
-router.get("/", [checkJwt], UserController.getAllUsers);
+router.get("/", UserController.getAllUsers);
 router.get("/:id", [checkJwt], UserController.getUserByID);
 router.patch("/:id", [checkJwt], UserController.editUserByID);
 

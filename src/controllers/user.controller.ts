@@ -1,43 +1,48 @@
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 import { User } from "../entities/user.entity";
 import { UserService } from "../services/user.service";
 import jwt_decode from "jwt-decode";
+import { APIError } from "./error-handlers/api-error";
+import { NotFoundError } from "./error-handlers/not-found-error";
+import { HttpStatusCode } from "./http-status-code";
+import { AlreadyInUseError } from "./error-handlers/already-in-use-error";
+
 
 export class UserController {
-  static getAllUsers = async (request: Request, response: Response) => {
+  static getAllUsers = async (request: Request, response: Response, next: NextFunction) => {
     try {
       const users: User[] = await UserService.getAllUsers();
-      response.status(200).json(users);
+      response.status(HttpStatusCode.OK).json(users);
     } catch(error) {
-      response.sendStatus(500);
+      next(new APIError());
     }
   }
 
-  static getUserByID = async (request: Request, response: Response) => {
+  static getUserByID = async (request: Request, response: Response, next: NextFunction) => {
     const userID: number = Number(request.params.id);
     try {
       const user: User = await UserService.getUserByID(userID);
-      response.status(200).json(user);
+      response.status(HttpStatusCode.OK).json(user);
     } catch (error) {
-      response.status(404).send("User is not found");
+      next(new NotFoundError(userID, "User"));
     }
   }
 
-  static editUserByID = async (request: Request, response: Response) => {
+  static editUserByID = async (request: Request, response: Response,  next: NextFunction) => {
     const userID: number = Number(jwt_decode(request.headers["authorization"]));
     const username: string = request.body["username"];
 
     if (!username) {
-      response.sendStatus(400);
+      response.sendStatus(HttpStatusCode.BAD_REQUEST);
       return;
     }
 
-    let user:User;
+    let user: User;
 
     try {
       user = await UserService.getUserByID(userID);
     } catch (error) {
-      response.status(404).send("User not found");
+      next(new NotFoundError(userID, "User"));
       return;
     }
 
@@ -45,9 +50,9 @@ export class UserController {
 
     try {
       user = await UserService.saveUser(user);
-      response.status(200).json(user);
+      response.status(HttpStatusCode.OK).json(user);
     } catch (error) {
-      response.status(409).send("username already in use");
+      next(new AlreadyInUseError("Username", username));
     }
   }
 }
