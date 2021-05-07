@@ -4,6 +4,6 @@ import { checkJwt } from "../middlewares/checkJwt";
 
 const router: Router = Router();
 
-router.get("/searchByText", [checkJwt], SearchController.searchByText);
+router.post("/searchByText", [checkJwt], SearchController.searchByText);
 
 export default router;

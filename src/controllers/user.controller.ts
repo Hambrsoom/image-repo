@@ -7,8 +7,26 @@ import { NotFoundError } from "./error-handlers/not-found-error";
 import { HttpStatusCode } from "./http-status-code";
 import { AlreadyInUseError } from "./error-handlers/already-in-use-error";
 
-
 export class UserController {
+
+  /** 
+    * @openapi
+    * /api/user:
+    *    get:
+    *      summary: Get all the users
+    *      tags: [User]
+    *      responses:
+    *          '200':
+    *              description: Got all the users
+    *              schema:
+    *                   type: array
+    *                   items:
+    *                       $ref: '#/components/schemas/UserInfo'          
+    *          '401':
+    *              description: Unauthorized
+    *          '500':
+    *              description: Failed to retrieve all the users
+  */
   static getAllUsers = async (request: Request, response: Response, next: NextFunction) => {
     try {
       const users: User[] = await UserService.getAllUsers();
@@ -18,18 +36,63 @@ export class UserController {
     }
   }
 
+  /** 
+       * @openapi
+       * /api/user/{id}:
+       *    get:
+       *      summary: Get user by id
+       *      tags: [User]
+       *      parameters:
+       *        - name: id
+       *          in: path
+       *          required: true
+       *          schema:
+       *               type: string
+       *      responses:
+       *          '200':
+       *              description: Got user by id
+       *              schema:
+       *                  $ref: '#/components/schemas/UserInfo'
+       *          '401':
+       *              description: Unauthorized
+       *          '404':
+       *              description: Failed to find the User with id ${id}
+  */
   static getUserByID = async (request: Request, response: Response, next: NextFunction) => {
-    const userID: number = Number(request.params.id);
+    const userId: number = Number(request.params.id);
     try {
-      const user: User = await UserService.getUserByID(userID);
+      const user: User = await UserService.getUserByID(userId);
       response.status(HttpStatusCode.OK).json(user);
     } catch (error) {
-      next(new NotFoundError(userID, "User"));
+      next(new NotFoundError(userId, "User"));
     }
   }
 
-  static editUserByID = async (request: Request, response: Response,  next: NextFunction) => {
-    const userID: number = Number(jwt_decode(request.headers["authorization"]));
+  /** 
+    * @openapi
+    * /api/user:
+    *    patch:
+    *      summary: Edit the username of the logged user
+    *      tags: [User]
+    *      parameters:
+    *        - name: body
+    *          in: body
+    *          required: true
+    *          schema:
+    *               type: object
+    *               properties:
+    *                 username:
+    *                   - type: string
+    *      responses:
+    *          '200':
+    *              description: Updated the username of the logged user
+    *              schema:
+    *                 $ref: '#/components/schemas/UserInfo'
+    *          '401':
+    *              description: Unauthorized or Username with value (${value}) is already in use
+  */
+  static editUsername = async (request: Request, response: Response,  next: NextFunction) => {
+    const userId: number = Number((jwt_decode(request.headers["authorization"])['userId']));
     const username: string = request.body["username"];
 
     if (!username) {
@@ -40,9 +103,9 @@ export class UserController {
     let user: User;
 
     try {
-      user = await UserService.getUserByID(userID);
+      user = await UserService.getUserByID(userId);
     } catch (error) {
-      next(new NotFoundError(userID, "User"));
+      next(new NotFoundError(userId, "User"));
       return;
     }
 

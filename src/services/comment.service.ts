@@ -1,7 +1,6 @@
 import { getRepository } from "typeorm";
 import { Comment } from "../entities/comment.entity";
 import { Image } from "../entities/image.entity";
-import { ImageService } from "../services/image.service";
 import { User } from "../entities/user.entity";
 import { UserService } from "./user.service";
 import jwt_decode from "jwt-decode";
@@ -11,7 +10,8 @@ import jwt_decode from "jwt-decode";
 export class CommentService {
     public static async getAllCommentsForImage(imageID: number): Promise<Comment[]>{
         return getRepository(Comment).find({
-            where: { image: imageID }
+            where: { image: imageID },
+            relations: ['user']
         });
     }
 
@@ -31,8 +31,13 @@ export class CommentService {
         return getRepository(Comment).save(comment);
     }
 
-    public static async getCommentByID(commentID: number): Promise<Comment> {
-        return await getRepository(Comment).findOne(commentID);
+    public static async getCommentByID(commentId: number): Promise<Comment> {
+        return await getRepository(Comment).findOneOrFail(
+            {
+                where: { id: commentId },
+                relations: ['user']
+            }
+        );
     }
 
     public static async deleteCommentByID(commentID: number): Promise<void> {

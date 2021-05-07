@@ -3,6 +3,44 @@ import { Length } from "class-validator";
 import { User } from "./user.entity";
 import { Comment } from "./comment.entity";
 
+/**
+ * @swagger
+ *
+ * components:
+ *      schemas:
+ *          Image:
+ *               properties:
+ *                  description:
+ *                      type: string
+ *                  isPublic:
+ *                      type: boolean
+ *                  name:
+ *                      type: string
+ */
+
+/**
+ * @swagger
+ *
+ * components:
+ *      schemas:
+ *          ReturnImage:
+ *               properties:
+ *                  id:
+ *                      type: number
+ *                  description:
+ *                      type: string
+ *                  isPublic:
+ *                      type: boolean
+ *                  name:
+ *                      type: string
+ *                  user:
+ *                      $ref: '#/components/schemas/UserInfo'
+ *                  comments:
+ *                      type: array
+ *                      items:
+ *                          $ref: '#/components/schemas/Comment'  
+ */
+
 @Entity()
 export class Image {
     @PrimaryGeneratedColumn()

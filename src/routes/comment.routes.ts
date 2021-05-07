@@ -5,9 +5,9 @@ import { isCommentOwner } from "../middlewares/isOwner";
 
 const router:Router = Router();
 
-router.get("/:id", [checkJwt], CommentController.getAllCommentsForImage);
-router.post("/:id", [checkJwt] ,CommentController.postCommentForImage);
-router.patch("/:id", [checkJwt], [isCommentOwner], CommentController.editComment);
-router.delete("/:id", [checkJwt], [isCommentOwner], CommentController.deleteComment);
+router.get("/:imageId", [checkJwt], CommentController.getAllCommentsForImage);
+router.post("/:imnageId", [checkJwt] ,CommentController.postCommentForImage);
+router.patch("/:commentId", [checkJwt], [isCommentOwner], CommentController.editComment);
+router.delete("/:commentId", [checkJwt], [isCommentOwner], CommentController.deleteComment);
 
 export default router;

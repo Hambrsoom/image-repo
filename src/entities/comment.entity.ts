@@ -2,6 +2,32 @@ import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToOne, JoinColumn
 import { Length } from "class-validator";
 import { User } from "./user.entity";
 import { Image } from "./image.entity";
+
+/**
+ * @swagger
+ *
+ * components:
+ *      schemas:
+ *          Comment:
+ *               properties:
+ *                  id:
+ *                      type: number
+ *                  description:
+ *                      type: string
+ *                  isPublic:
+ *                      type: boolean
+ *                  user:
+ *                      $ref: '#/components/schemas/UserInfo'
+ *                  createdAt:
+ *                      type: timestamp 
+ *                      example: 1995-09-07T10:40:52Z,
+ *                      format: date-time
+ *                  updatedAt:
+ *                      type: timestamp 
+ *                      example: 1995-09-07T10:40:52Z,
+ *                      format: date-time
+ */
+
 @Entity()
 export class Comment {
     @PrimaryGeneratedColumn()

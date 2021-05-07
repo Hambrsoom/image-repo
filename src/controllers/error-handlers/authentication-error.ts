@@ -1,4 +1,4 @@
-import { HttpStatusCode } from './http-status-code'
+import { HttpStatusCode } from '../http-status-code'
 import { BaseError } from './base-error';
 
 export class NotAuthenticatedError extends BaseError {

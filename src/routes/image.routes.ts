@@ -30,13 +30,11 @@ const upload: multer.Multer = multer(
 
 const router: Router = Router();
 
-router.get("/", [checkJwt], ImageController.getAllImagesByUserID);
+router.get("/:userId", [checkJwt], ImageController.getAllImagesByUserID);
 router.get("/publicImages", [checkJwt], ImageController.getAllPublicImages);
 
 router.post("/",[checkJwt], upload.single("image") , ImageController.addSingleImage);
 
 router.delete("/deleteSelectedImages", [checkJwt], [checkImageOwner], ImageController.deleteSelectedImages);
-
-router.delete("/",[checkJwt], ImageController.deleteAllImagesOfUser);
 
 export default router;

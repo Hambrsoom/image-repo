@@ -6,46 +6,47 @@ import jwt_decode from "jwt-decode";
 
 const fs:any = require("fs");
 
-
-
 export class ImageService {
     public static async addSingleImage(name: string, description: string,
-        path: string, userID: number, isPublic: boolean = true): Promise<Image> {
-        const user: User = await UserService.getUserByID(userID);
-
+        imageFile: any, userId: number, isPublic: boolean = true): Promise<Image> {
+        const user: User = await UserService.getUserByID(userId);
         const image: Image = {
             name: name,
             description: description,
             isPublic: isPublic,
-            path: path,
+            path: imageFile.path,
             user: user
         };
-
-        return await getRepository(Image).save(image);
+        const savedImage = await getRepository(Image).save(image)
+        return await ImageService.getImageById(savedImage.id);
     }
 
-    public static async getAllImagesByUserID(userID: number): Promise<Image[]> {
+    public static async getAllImagesByUserID(userId: number): Promise<Image[]> {
         return getRepository(Image).find({
-            where: { user: userID }
+            where: { user: userId },
+            relations: ["user", "comments"]
         });
     }
 
     public static async getAllPublicImages(): Promise<Image[]> {
         return getRepository(Image).find({
-            where: { isPublic: true }
+            where: { isPublic: true },
+            relations: ["user", "comments"]
         });
     }
 
-    public static async getImageByID(imageID: number): Promise<Image> {
+    public static async getImageById(imageId: number): Promise<Image> {
         return await getRepository(Image).findOneOrFail({
-            where: { id: imageID }
+            where: { id: imageId },
+            relations: ["user", "comments"]
         });
     }
 
-    public static async deleteImageByID(imageID: number): Promise<void> {
+    public static async deleteImageByID(imageId: number): Promise<void> {
         try {
-            const image: Image = await ImageService.getImageByID(imageID);
-            await getRepository(Image).delete(image);
+            const image: Image = await ImageService.getImageById(imageId);
+            console.log(image);
+            await getRepository(Image).delete(image.id);
             await ImageService.deleteImage(image.path);
         } catch (error) {
             throw error("Image is not found");
@@ -63,7 +64,7 @@ export class ImageService {
 
     public static async isOwnerOfImage(authorization: any, imageID: number): Promise<boolean> {
         const decoded = jwt_decode(authorization);
-
+        console.log(decoded)
         try {
             await getRepository(Image).findOneOrFail({
                 where: {
