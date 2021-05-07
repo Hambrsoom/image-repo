@@ -23,7 +23,7 @@ describe("register user", () => {
         UserService.saveUser = jest.fn().mockReturnValue(users[0]);
 
         // when
-        await AuthController.register(request, response);
+        await AuthController.register(request, response, next);
 
         // then
         expect(response.statusCode).toBe(201);
@@ -38,7 +38,7 @@ describe("register user", () => {
 
         try{
             // when
-            await AuthController.register(request, response);
+            await AuthController.register(request, response, next);
         } catch(error) {
             // then
             expect(response.statusCode).toBe(404);
@@ -56,7 +56,7 @@ describe("login user", () => {
         AuthService.login = jest.fn().mockReturnValue("123");
         // when
         
-        await AuthController.login(request, response);
+        await AuthController.login(request, response, next);
 
         // then
         expect(response.statusCode).toBe(200);
@@ -72,7 +72,7 @@ describe("login user", () => {
 
         try{
             // when
-            await AuthController.register(request, response);
+            await AuthController.register(request, response, next);
         } catch(error) {
             // then
             expect(response.statusCode).toBe(400);
@@ -90,7 +90,7 @@ describe("login user", () => {
         
         try {
             // when
-            await AuthController.login(request, response);
+            await AuthController.login(request, response, next);
         } catch(error) {
             // then
             expect(response.statusCode).toBe(401);

@@ -21,7 +21,7 @@ describe("Tests for SearchController methods", ()=> {
         SearchService.getImagesByText = jest.fn().mockReturnValue(images);
 
         // when
-        await SearchController.searchByText(request, response);
+        await SearchController.searchByText(request, response, next);
 
         // then
         expect(response.statusCode).toBe(200);
@@ -35,7 +35,7 @@ describe("Tests for SearchController methods", ()=> {
 
         try{
             // when
-            await SearchController.searchByText(request, response);
+            await SearchController.searchByText(request, response, next);
         } catch(error) {
             // then
             expect(response.statusCode).toBe(400);

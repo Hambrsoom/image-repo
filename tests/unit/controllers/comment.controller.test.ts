@@ -11,7 +11,7 @@ let request, response, next;
 beforeEach(() => {
   request = httpMocks.createRequest();
   response = httpMocks.createResponse();
-  next = null;
+  next = function(err) { response.statusCode = 500};
 })
 
 
@@ -22,7 +22,7 @@ describe("Tests for CommentController methods", ()=> {
         CommentService.getAllCommentsForImage = jest.fn().mockReturnValue(comments);
 
         // when
-        await CommentController.getAllCommentsForImage(request, response);
+        await CommentController.getAllCommentsForImage(request, response, next);
         
         // then
         expect(response.statusCode).toBe(200);
@@ -35,7 +35,7 @@ describe("Tests for CommentController methods", ()=> {
         CommentService.getAllCommentsForImage = jest.fn().mockReturnValue(rejectedPromise);
 
         // when
-        await CommentController.getAllCommentsForImage(request, response);
+        await CommentController.getAllCommentsForImage(request, response, next);
         
         // then
         expect(response.statusCode).toBe(500);
@@ -46,11 +46,11 @@ describe("Tests for CommentController methods", ()=> {
         request.headers["authorization"] = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoicG90YXRvIiwiaWF0IjoxNjEwNjY2OTcwLCJleHAiOjE2MTA2NzA1NzB9.Dpzq37zh3opw0jHAlQo23yPgxp1daE8olrKpxaOoOsI";
         request.params.id = 1
         request.body.description = "Beautiful Painting";
-        ImageService.getImageByID = jest.fn().mockReturnValue(images[0]);
+        ImageService.getImageById = jest.fn().mockReturnValue(images[0]);
         CommentService.postCommentForImage = jest.fn().mockReturnValue(comments[0]);
 
         // when
-        CommentController.postCommentForImage(request, response);
+        CommentController.postCommentForImage(request, response, next);
 
         // then
         expect(response.statusCode).toBe(200);
@@ -64,7 +64,7 @@ describe("Tests for CommentController methods", ()=> {
 
         try {
             // when
-            CommentController.postCommentForImage(request, response);
+            CommentController.postCommentForImage(request, response, next);
         } catch(error) {
             // then
             expect(response.statusCode).toBe(400);
@@ -77,11 +77,11 @@ describe("Tests for CommentController methods", ()=> {
         request.params.id = 1
         request.body.description = "Beautiful Painting";
         const rejectedPromise = Promise.reject();
-        ImageService.getImageByID = jest.fn().mockReturnValue(rejectedPromise);
+        ImageService.getImageById = jest.fn().mockReturnValue(rejectedPromise);
 
         try {
             // when
-            CommentController.postCommentForImage(request, response);
+            CommentController.postCommentForImage(request, response, next);
         } catch(error) {
             // then
             expect(response.statusCode).toBe(404);
@@ -94,11 +94,11 @@ describe("Tests for CommentController methods", ()=> {
         request.params.id = 1
         request.body.description = "Beautiful Painting";
         const rejectedPromise = Promise.reject();
-        ImageService.getImageByID = jest.fn().mockReturnValue(images[0]);
+        ImageService.getImageById = jest.fn().mockReturnValue(images[0]);
         CommentService.postCommentForImage = jest.fn().mockReturnValue(rejectedPromise);
         try {
             // when
-            CommentController.postCommentForImage(request, response);
+            CommentController.postCommentForImage(request, response, next);
         } catch(error) {
             // then
             expect(response.statusCode).toBe(500);
@@ -116,7 +116,7 @@ describe("Tests for CommentController methods", ()=> {
                
 
         // when
-        await CommentController.editComment(request, response);
+        await CommentController.editComment(request, response, next);
         
         // then
         expect(response.statusCode).toBe(200);
@@ -129,7 +129,7 @@ describe("Tests for CommentController methods", ()=> {
         request.body.description = undefined;
         try{
             // when
-            await CommentController.editComment(request, response);
+            await CommentController.editComment(request, response, next);
         } catch(error) {
             // then
             expect(response.statusCode).toBe(400);
@@ -145,7 +145,7 @@ describe("Tests for CommentController methods", ()=> {
 
         try{
             // when
-            await CommentController.editComment(request, response);
+            await CommentController.editComment(request, response, next);
         } catch(error) {
             // then
             expect(response.statusCode).toBe(404);
@@ -156,7 +156,7 @@ describe("Tests for CommentController methods", ()=> {
         request.params.id = 1;
         CommentService.deleteCommentByID = jest.fn().mockReturnValue(true);
 
-        await CommentController.deleteComment(request, response);
+        await CommentController.deleteComment(request, response, next);
 
         expect(response.statusCode).toBe(200);
     });
@@ -165,8 +165,10 @@ describe("Tests for CommentController methods", ()=> {
         request.params.id = 1;
         const rejectedPromise = Promise.reject();
         CommentService.deleteCommentByID = jest.fn().mockReturnValue(rejectedPromise);
-
-        await CommentController.deleteComment(request, response);
+        next = function(err) {
+            response.statusCode = 404;
+        }
+        await CommentController.deleteComment(request, response, next);
 
         expect(response.statusCode).toBe(404);
     });

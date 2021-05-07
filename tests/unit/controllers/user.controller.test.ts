@@ -10,7 +10,7 @@ let request, response, next;
 beforeEach(() => {
   request = httpMocks.createRequest();
   response = httpMocks.createResponse();
-  next = null;
+  next = function(err){ response.statusCode = 500};
 })
 
 
@@ -21,7 +21,7 @@ describe("Tests for UserController methods", ()=> {
         UserService.getAllUsers = jest.fn().mockReturnValue(users);
 
         // when
-        await UserController.getAllUsers(request, response);
+        await UserController.getAllUsers(request, response, next);
         
         // then
         expect(response.statusCode).toBe(200);
@@ -34,7 +34,7 @@ describe("Tests for UserController methods", ()=> {
         UserService.getAllUsers = jest.fn().mockReturnValue(rejectedPromise);
 
         // when
-        await UserController.getAllUsers(request, response);
+        await UserController.getAllUsers(request, response, next);
         
         // then
         expect(response.statusCode).toBe(500);
@@ -46,7 +46,7 @@ describe("Tests for UserController methods", ()=> {
         UserService.getUserByID = jest.fn().mockReturnValue(users[0]);
 
         // when
-        await UserController.getUserByID(request, response);
+        await UserController.getUserByID(request, response, next);
         
         // then
         expect(response.statusCode).toBe(200);
@@ -58,9 +58,12 @@ describe("Tests for UserController methods", ()=> {
         request.params.id = 14;
         const rejectedPromise = Promise.reject();
         UserService.getUserByID = jest.fn().mockReturnValue(rejectedPromise);
+        next = function(err){
+            response.statusCode = 404;
+        }
 
         // when
-        await UserController.getUserByID(request, response);
+        await UserController.getUserByID(request, response, next);
         
         // then
         expect(response.statusCode).toBe(404);
@@ -79,7 +82,7 @@ describe("Tests for UserController methods", ()=> {
         UserService.saveUser = jest.fn().mockReturnValue(newUser);        
 
         // when
-        await UserController.editUserByID(request, response);
+        await UserController.editUsername(request, response, next);
         
         // then
         expect(response.statusCode).toBe(200);
@@ -92,7 +95,7 @@ describe("Tests for UserController methods", ()=> {
         request.body.username = undefined;
         try{
             // when
-            await UserController.editUserByID(request, response);
+            await UserController.editUsername(request, response, next);
         } catch(error) {
             // then
             expect(response.statusCode).toBe(200);
@@ -108,7 +111,7 @@ describe("Tests for UserController methods", ()=> {
 
         try{
             // when
-            await UserController.editUserByID(request, response);
+            await UserController.editUsername(request, response, next);
         } catch(error) {
             // then
             expect(response.statusCode).toBe(404);
@@ -125,7 +128,7 @@ describe("Tests for UserController methods", ()=> {
 
         try{
             // when
-            await UserController.editUserByID(request, response);
+            await UserController.editUsername(request, response, next);
         } catch(error) {
             // then
             expect(response.statusCode).toBe(409);

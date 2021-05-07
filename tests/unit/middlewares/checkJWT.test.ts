@@ -1,6 +1,5 @@
 import httpMocks from "node-mocks-http";
-import { ImageService } from "../../../src/services/image.service";
-import { checkImageOwner } from "../../../src/middlewares/checkImageOwner";
+import { checkJwt } from "../../../src/middlewares/checkJwt";
 let request, response, next;
 
 beforeEach(() => {
@@ -11,28 +10,27 @@ beforeEach(() => {
   };
 })
 
-describe("Tests for CheckJWT methods", ()=> {
-    test("Check if the image Owner is the logged user succesfully", async() => {
+describe("Tests for CheckImageOwner methods", ()=> {
+    test("check if the JWT is the proper one fail and return response 404", async() => {
         // given
-        request.headers["authorization"] = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoicG90YXRvIiwiaWF0IjoxNjEwNjY2OTcwLCJleHAiOjE2MTA2NzA1NzB9.Dpzq37zh3opw0jHAlQo23yPgxp1daE8olrKpxaOoOsI";
-        request.body.listOfImageIDs = [1,2];
-        ImageService.isOwnerOfImage = jest.fn().mockReturnValue(true);
-        
+        request.headers["authorization"] = "eyJhbGciOiJIUzI1nR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoicG90wiaWF0IjoxNjEwNjY2OTcwLCJleHAA2NzA1NzB9.Dpzq37zh3lQo23yPgxp1daE8olrKpxaOoOsI";
+                
         // when
-        checkImageOwner(request, response, next);
-
-        expect(ImageService.isOwnerOfImage).toHaveBeenCalledTimes(2);
+        try{
+            checkJwt(request, response, next);
+        }catch(error) {
+            expect(response.statusCode).toBe(404);
+        }
     });
 
-    test("Check if the image Owner is the logged user fail", async() => {
+    test("check if the JWT is the proper one succesfully", async() => {
         // given
         request.headers["authorization"] = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoicG90YXRvIiwiaWF0IjoxNjEwNjY2OTcwLCJleHAiOjE2MTA2NzA1NzB9.Dpzq37zh3opw0jHAlQo23yPgxp1daE8olrKpxaOoOsI";
-        request.body.listOfImageIDs = [1,2,3,4];
-        ImageService.isOwnerOfImage = jest.fn().mockReturnValue(false);
         
         // when
-        checkImageOwner(request, response, next);
+        checkJwt(request, response, next);
 
-        expect(ImageService.isOwnerOfImage).toHaveBeenCalledTimes(1);
+        // then 
+        expect(next()).toBe(true);
     });
 });

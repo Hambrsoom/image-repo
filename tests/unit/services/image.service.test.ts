@@ -49,7 +49,7 @@ describe("Tests for ImageService methods", () => {
 
     test("delete image by id successfully", async() => {
         // given
-        ImageService.getImageByID = jest.fn().mockReturnValue(images[0]);
+        ImageService.getImageById = jest.fn().mockReturnValue(images[0]);
         getRepository(Image).delete = jest.fn().mockReturnValue(true);
         ImageService.deleteImage = jest.fn().mockReturnValue(true);
        
@@ -57,7 +57,7 @@ describe("Tests for ImageService methods", () => {
         await ImageService.deleteImageByID(images[0].id);
        
        // then
-       expect(ImageService.getImageByID).toHaveBeenCalledTimes(1);
+       expect(ImageService.getImageById).toHaveBeenCalledTimes(1);
        expect(ImageService.deleteImage).toHaveBeenCalledTimes(1);
        expect(ImageService.deleteImage).toHaveBeenCalledWith(images[0].path);
     });
@@ -66,14 +66,14 @@ describe("Tests for ImageService methods", () => {
         expect.assertions(1)
         // given
         const rejectedPromise = Promise.reject();
-        ImageService.getImageByID = jest.fn().mockResolvedValue(rejectedPromise);
+        ImageService.getImageById = jest.fn().mockResolvedValue(rejectedPromise);
        
         try{
             // when
             await ImageService.deleteImageByID(1);
         }catch(error) {
             // then
-            expect(ImageService.getImageByID).toHaveBeenCalledTimes(1);
+            expect(ImageService.getImageById).toHaveBeenCalledTimes(1);
         }
     });
 

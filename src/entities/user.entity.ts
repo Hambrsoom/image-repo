@@ -49,7 +49,7 @@ import { IsUsernameAlreadyExist } from "../utils/usernameValidator";
 
 @Entity()
 @Unique(["username"])
-export class User extends BaseEntity {
+export class User {
 
     @PrimaryGeneratedColumn()
     id: number;

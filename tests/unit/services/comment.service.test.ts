@@ -93,10 +93,11 @@ describe("Tests for CommentService methods", () => {
 
     test("is Owner of Image returns true", async() => {
         // given
+        const authorization = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoicG90YXRvIiwiaWF0IjoxNjEwNjY2OTcwLCJleHAiOjE2MTA2NzA1NzB9.Dpzq37zh3opw0jHAlQo23yPgxp1daE8olrKpxaOoOsI";
         getRepository(Comment).findOneOrFail = jest.fn().mockResolvedValue(comments[0]);
 
         // when 
-        const result: boolean = await CommentService.isOwnerOfComment(1, 1);
+        const result: boolean = await CommentService.isOwnerOfComment(authorization, 1);
     
         // then
         expect(result).toBe(true);
@@ -104,13 +105,14 @@ describe("Tests for CommentService methods", () => {
 
     test("is Owner of Image returns false", async() => {
         // given
+        const authorization = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoicG90YXRvIiwiaWF0IjoxNjEwNjY2OTcwLCJleHAiOjE2MTA2NzA1NzB9.Dpzq37zh3opw0jHAlQo23yPgxp1daE8olrKpxaOoOsI";
         const rejectedPromise = Promise.reject();
         getRepository(Comment).findOneOrFail = jest.fn().mockResolvedValue(rejectedPromise);
 
         let result:boolean;
         try{
             // when
-            result = await CommentService.isOwnerOfComment(123, 123);
+            result = await CommentService.isOwnerOfComment(authorization, 123);
         }catch (error) {
             // then
             expect(result).toBe(false);

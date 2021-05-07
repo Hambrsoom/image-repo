@@ -74,8 +74,6 @@ export class AuthController {
       response.status(HttpStatusCode.OK).json({token:token});
     }
 
-
-
     /**
        * @openapi
        * /api/auth/register:
@@ -113,7 +111,7 @@ export class AuthController {
 
       try {
         await UserService.saveUser(user);
-        response.sendStatus(HttpStatusCode.OK);
+        response.sendStatus(HttpStatusCode.CREATED);
       } catch (error) {
         next(new AlreadyInUseError("Username", user.username));
       }

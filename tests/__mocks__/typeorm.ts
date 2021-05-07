@@ -20,3 +20,4 @@ export const ManyToMany = jest.fn(callback => callback());
 export const OneToOne = jest.fn(callback => callback());
 export const OneToMany = jest.fn(callback => callback());
 export const JoinColumn = jest.fn(callback =>{});
+export const IsUsernameAlreadyExist = jest.fn(callback => {});

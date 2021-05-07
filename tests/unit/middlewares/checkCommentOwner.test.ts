@@ -1,6 +1,6 @@
 import httpMocks from "node-mocks-http";
 import { CommentService } from "../../../src/services/comment.service"; 
-import { checkCommentOwner } from "../../../src/middlewares/checkCommentOwner";
+import { isCommentOwner } from "../../../src/middlewares/isOwner";
 let request, response, next;
 
 beforeEach(() => {
@@ -19,7 +19,7 @@ describe("Tests for CheckCommentOwner methods", ()=> {
         CommentService.isOwnerOfComment = jest.fn().mockReturnValue(true);
         
         // when
-        checkCommentOwner(request, response, next);
+        isCommentOwner(request, response, next);
 
         // then
         expect(CommentService.isOwnerOfComment).toHaveBeenCalledTimes(1);
@@ -32,7 +32,7 @@ describe("Tests for CheckCommentOwner methods", ()=> {
         CommentService.isOwnerOfComment = jest.fn().mockReturnValue(false);
         
         // when
-        checkCommentOwner(request, response, next);
+        isCommentOwner(request, response, next);
         
         // then
         expect(CommentService.isOwnerOfComment).toHaveBeenCalledTimes(1);

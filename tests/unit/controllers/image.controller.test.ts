@@ -12,38 +12,13 @@ beforeEach(() => {
 })
 
 describe("Tests for ImageController methods", ()=> {
-    test("delete all images of a user succesffuly and return status 200", async() => {
-        // given
-        request.headers["authorization"] = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoicG90YXRvIiwiaWF0IjoxNjEwNjY2OTcwLCJleHAiOjE2MTA2NzA1NzB9.Dpzq37zh3opw0jHAlQo23yPgxp1daE8olrKpxaOoOsI";
-        ImageService.getAllImagesByUserID = jest.fn().mockReturnValue(images);
-        ImageService.deleteImageByID = jest.fn().mockReturnValue(true);
-
-        // when
-        await ImageController.deleteAllImagesOfUser(request, response);
-        
-        // then
-        expect(response.statusCode).toBe(200);
-    });
-
-    test("delete all images of a user who does not have any images succesffuly and return status 200", async() => {
-        // given
-        request.headers["authorization"] = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoicG90YXRvIiwiaWF0IjoxNjEwNjY2OTcwLCJleHAiOjE2MTA2NzA1NzB9.Dpzq37zh3opw0jHAlQo23yPgxp1daE8olrKpxaOoOsI";
-        ImageService.getAllImagesByUserID = jest.fn().mockReturnValue([]);
-
-        // when
-        await ImageController.deleteAllImagesOfUser(request, response);
-
-        // then
-        expect(response.statusCode).toBe(200);
-    });
-
     test("delete selected images of a user succesffully and return 200", async() => {
          // given 
          request.body.listOfImageIDs = [];
 
          try{
              // when
-             await ImageController.deleteSelectedImages(request, response);
+             await ImageController.deleteSelectedImages(request, response, next);
          } catch(error) {
              // then
              expect(response.statusCode).toBe(404);
@@ -57,7 +32,7 @@ describe("Tests for ImageController methods", ()=> {
 
         try{
             // when
-            await ImageController.deleteSelectedImages(request, response);
+            await ImageController.deleteSelectedImages(request, response, next);
         } catch(error) {
             // then
             expect(response.statusCode).toBe(200);
@@ -69,7 +44,7 @@ describe("Tests for ImageController methods", ()=> {
         ImageService.getAllPublicImages = jest.fn().mockReturnValue(images);
 
         // when
-        await ImageController.getAllPublicImages(request, response);
+        await ImageController.getAllPublicImages(request, response, next);
 
         // then
         expect(response.statusCode).toBe(200);
@@ -83,7 +58,7 @@ describe("Tests for ImageController methods", ()=> {
         ImageService.getAllImagesByUserID = jest.fn().mockReturnValue(listOfImagesOfUser);
 
         // when
-        await ImageController.getAllImagesByUserID(request, response);
+        await ImageController.getAllImagesByUserID(request, response, next);
 
         // then
         expect(response.statusCode).toBe(200);
@@ -99,7 +74,7 @@ describe("Tests for ImageController methods", ()=> {
         ImageService.addSingleImage = jest.fn().mockReturnValue(images[0]);
 
         // when
-        await ImageController.addSingleImage(request, response);
+        await ImageController.addSingleImage(request, response, next);
 
         //then 
         expect(response.statusCode).toBe(200)
@@ -115,7 +90,7 @@ describe("Tests for ImageController methods", ()=> {
         ImageService.addSingleImage = jest.fn().mockReturnValue(images[0]);
 
         // when
-        await ImageController.addSingleImage(request, response);
+        await ImageController.addSingleImage(request, response, next);
 
         //then 
         expect(response.statusCode).toBe(200)
@@ -130,7 +105,7 @@ describe("Tests for ImageController methods", ()=> {
         ImageService.addSingleImage = jest.fn().mockReturnValue(images[0]);
 
         // when
-        await ImageController.addSingleImage(request, response);
+        await ImageController.addSingleImage(request, response, next);
 
         //then 
         expect(response.statusCode).toBe(400);
