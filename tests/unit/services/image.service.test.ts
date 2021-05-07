@@ -26,6 +26,7 @@ describe("Tests for ImageService methods", () => {
     test("Add single image successfully", async() => {
         // given
         getRepository(Image).save = jest.fn().mockReturnValue(images[1]);
+        getRepository(Image).findOneOrFail = jest.fn().mockReturnValue(images[1]);
         UserService.getUserByID = jest.fn().mockReturnValue(users[1]);
         
         // when
@@ -79,10 +80,11 @@ describe("Tests for ImageService methods", () => {
 
     test("is Owner of Image returns true", async() => {
         // given
+        const authorization = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoicG90YXRvIiwiaWF0IjoxNjEwNjY2OTcwLCJleHAiOjE2MTA2NzA1NzB9.Dpzq37zh3opw0jHAlQo23yPgxp1daE8olrKpxaOoOsI";
         getRepository(Image).findOneOrFail = jest.fn().mockResolvedValue(images[0]);
 
         // when 
-        const result: boolean = await ImageService.isOwnerOfImage(1, 1);
+        const result: boolean = await ImageService.isOwnerOfImage(authorization, 1);
     
         // then
         expect(result).toBe(true);
@@ -90,14 +92,15 @@ describe("Tests for ImageService methods", () => {
 
     test("is Owner of Image returns false", async() => {
         // given
+        const authorization = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoicG90YXRvIiwiaWF0IjoxNjEwNjY2OTcwLCJleHAiOjE2MTA2NzA1NzB9.Dpzq37zh3opw0jHAlQo23yPgxp1daE8olrKpxaOoOsI";
         const rejectedPromise = Promise.reject();
         getRepository(Image).findOneOrFail = jest.fn().mockResolvedValue(rejectedPromise);
 
         let result:boolean;
         try{
             // when
-            result = await ImageService.isOwnerOfImage(123, 123);
-        }catch (error) {
+            result = await ImageService.isOwnerOfImage(authorization, 123);
+        } catch (error) {
             // then
             expect(result).toBe(false);
         }

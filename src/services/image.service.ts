@@ -64,7 +64,7 @@ export class ImageService {
 
     public static async isOwnerOfImage(authorization: any, imageID: number): Promise<boolean> {
         const decoded = jwt_decode(authorization);
-        console.log(decoded)
+        
         try {
             await getRepository(Image).findOneOrFail({
                 where: {
