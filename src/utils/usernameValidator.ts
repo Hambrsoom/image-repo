@@ -1,4 +1,5 @@
 import { registerDecorator, ValidationOptions, ValidatorConstraint, ValidatorConstraintInterface } from "class-validator";
+import { getRepository } from "typeorm";
 
   import { User } from "../entities/user.entity";
 
@@ -7,7 +8,7 @@ import { registerDecorator, ValidationOptions, ValidatorConstraint, ValidatorCon
     validate(
       username: string
       ) {
-        return User.findOne({ where: { username } }).then(user => {
+        return getRepository(User).findOne({ where: { username } }).then(user => {
           if (user) {
             return false;
           }
