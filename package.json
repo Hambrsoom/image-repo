@@ -4,7 +4,8 @@
   "description": "Capstone project (SOEN 490) - MedicDrones created by team Octocats",
   "main": "./src/server.ts",
   "scripts": {
-    "dev": "nodemon",
+    "dev": "cross-env NODE_ENV=development tsnd --inspect --respawn ./src/server.ts",
+    "prod": "cross-env NODE_ENV=production tsnd --inspect --respawn ./src/server.ts",
     "test": "jest",
     "cover": "jest --coverage",
     "typecheck": "tsc"
@@ -24,6 +25,7 @@
     "@types/mocha": "^8.0.3",
     "assets": "^3.0.1",
     "axios": "^0.21.0",
+    "cross-env": "^7.0.3",
     "axios-mock-adapter": "^1.19.0",
     "bcrypt": "^5.0.0",
     "bcryptjs": "^2.4.3",
