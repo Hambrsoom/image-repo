@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { ImageController } from "../controllers/image.controller";
 import { checkJwt } from "../middlewares/checkJwt";
-import { checkImageOwner } from "../middlewares/checkImageOwner";
+import { isImageOnwer } from "../middlewares/isOwner";
 import path from "path";
 
 import multer from "multer";
@@ -35,6 +35,6 @@ router.get("/publicImages", [checkJwt], ImageController.getAllPublicImages);
 
 router.post("/",[checkJwt], upload.single("image") , ImageController.addSingleImage);
 
-router.delete("/deleteSelectedImages", [checkJwt], [checkImageOwner], ImageController.deleteSelectedImages);
+router.delete("/deleteSelectedImages", [checkJwt], [isImageOnwer], ImageController.deleteSelectedImages);
 
 export default router;
