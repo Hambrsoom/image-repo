@@ -4,7 +4,7 @@
   "description": "Capstone project (SOEN 490) - MedicDrones created by team Octocats",
   "main": "./src/server.ts",
   "scripts": {
-    "start": "cross-env NODE_ENV=development tsnd --inspect --respawn ./src/server.ts",
+    "dev": "cross-env NODE_ENV=development tsnd --inspect --respawn ./src/server.ts",
     "prod": "cross-env NODE_ENV=production tsnd --inspect --respawn ./src/server.ts",
     "test": "jest",
     "cover": "jest --coverage",
